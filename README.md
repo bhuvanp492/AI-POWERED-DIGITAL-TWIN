@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AI-DT-CyberShield: AI-Powered Digital Twin for Predictive Cybersecurity of Cloud Applications
 
 **Final-Year B.Tech Computer Science & Engineering Capstone Project**  
@@ -288,3 +289,6 @@ Follow this step-by-step procedure during the B.Tech project review:
    - Anomalies Detected and High-Risk KPI counters have incremented.
 2. Click **Logout 🚪** in the topbar or sidebar:
    - The analyst session is terminated and the user is securely returned to the login screen.
+=======
+# AI-POWERED-DIGITAL-TWIN
+>>>>>>> 85d5059d7463c422dcd38782e73be2ca1bbbc23f

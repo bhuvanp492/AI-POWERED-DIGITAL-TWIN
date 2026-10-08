@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-DT-CyberShield | AI-Powered Digital Twin for Predictive Cybersecurity</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body>
+
+<!-- ===================================================================
+     LOGIN / AUTHENTICATION VIEW (Guards the Application)
+     =================================================================== -->
+<div id="login-container" class="login-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo-badge" style="margin-bottom: 8px;">
+        <span>🛡️</span>
+        <span>AI-DT-CYBERSHIELD</span>
+      </div>
+      <h2 style="font-size: 20px; font-weight: 700; color: var(--text-primary);">Security Analyst Login</h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+        Predictive Cybersecurity of Cloud Applications • Final-Year B.Tech CSE Prototype
+      </p>
+    </div>
+
+    <!-- Academic Thesis Notice -->
+    <div class="login-notice">
+      <strong>Core Security Principle:</strong> Authentication confirms credentials, but 
+      <em>valid login does not guarantee safe behavior</em>. The AI-DT-CyberShield model monitors and evaluates 
+      activity <strong>after</strong> authentication.
+    </div>
+
+    <!-- Error Banner -->
+    <div id="login-error-banner" class="login-error-banner" style="display: none;">
+      <span style="font-size: 16px;">⚠️</span>
+      <span id="login-error-text">Invalid username or password.</span>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form" class="login-form">
+      <div class="form-group">
+        <label for="login-username" class="form-label">Username</label>
+        <input type="text" id="login-username" class="form-control" placeholder="Enter username (e.g. admin)" required autocomplete="username">
+      </div>
+
+      <div class="form-group">
+        <label for="login-password" class="form-label">Password</label>
+        <input type="password" id="login-password" class="form-control" placeholder="Enter password (e.g. admin123)" required autocomplete="current-password">
+      </div>
+
+      <button type="submit" id="btn-login-submit" class="btn btn-primary" style="width: 100%; padding: 10px; font-weight: 600;">
+        Sign In to CyberShield ➔
+      </button>
+    </form>
+
+    <!-- Demo Credentials Footer -->
+    <div class="login-footer">
+      <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 4px;">
+        Seeded Demo Accounts (Salted PBKDF2 Hashes)
+      </div>
+      
+      <div style="font-size: 11px; color: var(--primary); margin-top: 6px; cursor: pointer; text-decoration: underline;" id="btn-autofill-demo">
+        Auto-fill Default Admin Credentials
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================================
+     MAIN APPLICATION WORKSPACE (Accessible only when Authenticated)
+     =================================================================== -->
+<div class="app-container" id="app-container" style="display: none;">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-badge">
+        <span>🛡️</span>
+        <span>AI-DT-CYBERSHIELD</span>
+      </div>
+      <h1 class="app-title">CyberShield Twin</h1>
+      <p class="app-subtitle">Predictive Cloud Security</p>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a class="nav-link active" data-view="dashboard" id="nav-dashboard">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-view="activity" id="nav-activity">
+          <span class="nav-icon">📋</span>
+          <span>Activity Monitor</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-view="analysis" id="nav-analysis">
+          <span class="nav-icon">🧠</span>
+          <span>AI Security Analysis</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-view="digital-twin" id="nav-digital-twin">
+          <span class="nav-icon">🌐</span>
+          <span>Digital Twin</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-view="simulation" id="nav-simulation">
+          <span class="nav-icon">⚡</span>
+          <span>Security Testing</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-view="settings" id="nav-settings">
+          <span class="nav-icon">⚙️</span>
+          <span>Settings & Model</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Sidebar Session & Logout Footer -->
+    <div class="sidebar-footer">
+      <div class="session-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <strong id="sidebar-user-name" style="color: var(--text-primary); font-size: 12px;">admin</strong>
+          <span style="font-size: 10px; color: var(--success); font-weight: 700;">● Active</span>
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted);" id="sidebar-user-role">Lead Security Analyst</div>
+        <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;" id="sidebar-session-time">Logged in: Just now</div>
+        <button class="btn btn-secondary btn-sm" id="btn-sidebar-logout" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 4px;">
+          Sign Out 🚪
+        </button>
+      </div>
+
+      <div style="font-size: 11px; color: var(--text-muted); margin-top: 10px;">B.Tech CSE Capstone Project</div>
+      <div class="phase-indicator">
+        <span>Phase 1 (Local)</span>
+        <span style="color: var(--success); font-weight: 700;">● Online</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="breadcrumb-title" id="breadcrumb-title">Dashboard Overview</span>
+      </div>
+      <div class="topbar-right">
+        <!-- Live System Status Badge -->
+        <div class="status-pill secure" id="topbar-status-pill">
+          <span class="status-dot"></span>
+          <span id="topbar-status-text">● SECURE</span>
+        </div>
+
+        <!-- Light / Dark Mode Toggle -->
+        <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light / Dark Mode">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-label">Dark Mode</span>
+        </button>
+
+        <!-- Topbar Logout Button -->
+        <button class="btn btn-secondary btn-sm" id="btn-topbar-logout" title="Terminate current analyst session">
+          Logout 🚪
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Views Container -->
+    <main class="page-container">
+
+      <!-- ===================================================================
+           VIEW 1: DASHBOARD
+           =================================================================== -->
+      <section class="view-section active" id="view-dashboard">
+        <div class="view-header">
+          <h2 class="view-title">Cybersecurity Dashboard</h2>
+          <p class="view-subtitle">Real-time application telemetry and AI-driven behavioral anomaly posture</p>
+        </div>
+
+        <!-- Current Security Status Banner -->
+        <div class="status-banner-card" id="dashboard-status-banner">
+          <div class="status-banner-left">
+            <div class="status-badge-lg secure" id="dashboard-status-badge">
+              <span class="status-dot"></span>
+              <span id="dashboard-status-title">● SECURE</span>
+            </div>
+            <div>
+              <div style="font-weight: 600; font-size: 14px;" id="dashboard-status-headline">All Monitored Systems Operational</div>
+              <div class="status-desc" id="dashboard-status-desc">Zero critical anomalies detected across authenticated sessions. Isolation Forest model active.</div>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-secondary btn-sm" id="btn-quick-simulate">Run Security Test ⚡</button>
+          </div>
+        </div>
+
+        <!-- Top Metrics KPI Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Events Monitored</div>
+            <div class="kpi-value" id="kpi-total">0</div>
+            <div class="kpi-subtext">Telemetry logs recorded</div>
+          </div>
+          <div class="kpi-card normal">
+            <div class="kpi-label">Normal Events</div>
+            <div class="kpi-value" style="color: var(--success);" id="kpi-normal">0</div>
+            <div class="kpi-subtext">Verified baseline behavior</div>
+          </div>
+          <div class="kpi-card suspicious">
+            <div class="kpi-label">Anomalies Detected</div>
+            <div class="kpi-value" style="color: var(--warning);" id="kpi-suspicious">0</div>
+            <div class="kpi-subtext">Flagged by Isolation Forest</div>
+          </div>
+          <div class="kpi-card high-risk">
+            <div class="kpi-label">High-Risk Events</div>
+            <div class="kpi-value" style="color: var(--danger);" id="kpi-high-risk">0</div>
+            <div class="kpi-subtext">Risk score > 60 / 100</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Current Risk Score</div>
+            <div class="kpi-value" id="kpi-risk-level">Low</div>
+            <div class="kpi-subtext" id="kpi-avg-risk">Avg score: 0 / 100</div>
+          </div>
+        </div>
+
+        <!-- Latest AI Decision Card -->
+        <div class="card" id="dashboard-latest-decision-card" style="margin-bottom: 20px;">
+          <div class="card-header">
+            <h3 class="card-title">Latest AI Behaviour Decision</h3>
+            <span style="font-size: 11px; color: var(--text-muted);">Evaluated via Isolation Forest Model</span>
+          </div>
+          <div class="card-body" id="dashboard-latest-decision-body">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+              <div>
+                <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Latest Inspected Event</div>
+                <div style="font-size: 15px; font-weight: 700; margin-top: 2px;" id="dash-latest-scenario">Normal Baseline Telemetry</div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;" id="dash-latest-desc">User: faculty_chen • Resource: Course Catalog API</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="text-align: right;">
+                  <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted);">AI Classification</div>
+                  <div class="badge normal" id="dash-latest-pred" style="font-size: 13px; padding: 4px 10px; margin-top: 2px;">NORMAL</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted);">Risk Score</div>
+                  <div style="font-size: 18px; font-weight: 800; color: var(--success);" id="dash-latest-risk">12 / 100 (LOW)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Application Activity & Telemetry Trigger (Module 5.2) -->
+        <div class="card" style="border: 2px solid var(--primary-border); margin-bottom: 20px;">
+          <div class="card-header" style="background-color: var(--primary-light); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h3 class="card-title" style="color: var(--primary);">⚡ Live Authenticated Application Activity (Module 5.2)</h3>
+              <p style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
+                Execute authentic cloud actions as user <strong id="live-user-badge" style="color: var(--text-primary);">admin</strong>. Telemetry is collected, converted to 12 features, and evaluated in real-time by the Isolation Forest model.
+              </p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center; font-size: 12px;">
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                <input type="checkbox" id="toggle-live-device"> <span>Simulate New Device</span>
+              </label>
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                <input type="checkbox" id="toggle-live-ip"> <span>Simulate External IP</span>
+              </label>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 16px;">
+              <button class="btn btn-secondary live-action-btn" data-action="catalog_query" style="text-align: left; padding: 12px;">
+                <div style="font-weight: 700; font-size: 13px; color: var(--success);">📘 Normal Catalog Query</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Tier 1 API • 6 records • 1.4 MB • Nominal</div>
+              </button>
+
+              <button class="btn btn-secondary live-action-btn" data-action="profile_access" style="text-align: left; padding: 12px;">
+                <div style="font-weight: 700; font-size: 13px; color: var(--success);">🎓 Normal Student Directory</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Tier 2 Portal • 10 records • 2.5 MB • Standard</div>
+              </button>
+
+              <button class="btn btn-secondary live-action-btn" data-action="financial_query" style="text-align: left; padding: 12px;">
+                <div style="font-weight: 700; font-size: 13px; color: var(--warning);">⚠️ Sensitive Financial Query</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Tier 4 DB • 85 records • 28.5 MB • Sensitive</div>
+              </button>
+
+              <button class="btn btn-secondary live-action-btn" data-action="exam_db_access" style="text-align: left; padding: 12px;">
+                <div style="font-weight: 700; font-size: 13px; color: var(--danger);">🚨 Restricted Exam DB Query</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Tier 5 DB • 850 records • 450 MB • High Egress</div>
+              </button>
+
+              <button class="btn btn-secondary live-action-btn" data-action="api_burst_test" style="text-align: left; padding: 12px;">
+                <div style="font-weight: 700; font-size: 13px; color: var(--danger);">⚡ Volumetric API Burst</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">340 req/min • Scraping velocity spike</div>
+              </button>
+            </div>
+
+            <!-- Live Action Execution Result Card -->
+            <div id="live-action-result-box" style="display: none; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px; border-left: 5px solid var(--primary);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                <div>
+                  <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Live Telemetry Evaluation Result (Modules 5.2 & 5.3)</span>
+                  <div style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-top: 2px;" id="live-res-title">Executed Action</div>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <span class="badge normal" id="live-res-badge">NORMAL</span>
+                  <span class="badge-risk low" id="live-res-risk">12 / 100 (LOW)</span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 12px; margin-bottom: 12px;">
+                <div><span style="color: var(--text-muted);">User & Origin:</span> <strong id="live-res-user">admin</strong></div>
+                <div><span style="color: var(--text-muted);">Target Resource:</span> <strong id="live-res-resource">Course Catalog API</strong></div>
+                <div><span style="color: var(--text-muted);">Observed Telemetry:</span> <strong id="live-res-telemetry">18 req/min</strong></div>
+              </div>
+              <div style="font-size: 12px; margin-bottom: 6px;">
+                <span style="color: var(--text-muted); font-weight: 600;">AI Explainable Reason:</span>
+                <span id="live-res-reason" style="color: var(--text-primary);">All metrics nominal.</span>
+              </div>
+              <div style="font-size: 12px; margin-bottom: 12px;">
+                <span style="color: var(--text-muted); font-weight: 600;">Prescriptive Action:</span>
+                <span id="live-res-action" style="color: var(--text-secondary);">Continue continuous monitoring.</span>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btn-inspect-live-action">Inspect Detailed AI Diagnostics 🔍</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Security Events Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Security Events</h3>
+            <button class="btn btn-secondary btn-sm" id="btn-refresh-dashboard">Refresh Logs 🔄</button>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="data-table" id="dashboard-recent-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>User</th>
+                    <th>Source</th>
+                    <th>Action</th>
+                    <th>Resource</th>
+                    <th>Risk</th>
+                    <th>AI Classification</th>
+                    <th>Inspect</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-events-tbody">
+                  <tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading live security events...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ===================================================================
+           VIEW 2: ACTIVITY MONITOR
+           =================================================================== -->
+      <!-- ===================================================================
+           VIEW 2: ACTIVITY MONITOR
+           =================================================================== -->
+      <section class="view-section" id="view-activity">
+        <div class="view-header">
+          <h2 class="view-title">Activity Monitor & Telemetry Pipeline</h2>
+          <p class="view-subtitle">Real-time HTTP request interception, sliding-window behaviour aggregation, and anomaly audit trail</p>
+        </div>
+
+        <!-- Telemetry Pipeline Architecture Banner -->
+        <div class="card" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95)); border: 1px solid rgba(59, 130, 246, 0.35);">
+          <div class="card-body">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #60a5fa; letter-spacing: 0.05em;">Live Telemetry Interception Pipeline (Module 5.2)</span>
+                <h3 style="font-size: 15px; margin: 4px 0 0 0; color: #fff;">Every Authenticated API Request ➔ 10 Telemetry Fields ➔ SQLite DB ➔ Behaviour Aggregation ➔ Isolation Forest</h3>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.3);">● Live Interceptor Active</span>
+                <button class="btn btn-secondary btn-sm" id="btn-refresh-telemetry-stream">Refresh Stream 🔄</button>
+              </div>
+            </div>
+
+            <!-- Pipeline Operational Counters -->
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 12px;">
+              <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px;">
+                <div style="font-size: 11px; color: var(--text-muted);">Requests Intercepted</div>
+                <div style="font-size: 20px; font-weight: 700; color: #60a5fa; font-family: var(--font-mono);" id="pipe-total-reqs">0</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px;">
+                <div style="font-size: 11px; color: var(--text-muted);">Monitored Users</div>
+                <div style="font-size: 20px; font-weight: 700; color: #34d399; font-family: var(--font-mono);" id="pipe-active-users">0</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px;">
+                <div style="font-size: 11px; color: var(--text-muted);">Anomalies Flagged</div>
+                <div style="font-size: 20px; font-weight: 700; color: #f87171; font-family: var(--font-mono);" id="pipe-anomalies">0</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px;">
+                <div style="font-size: 11px; color: var(--text-muted);">Avg Anomaly Score</div>
+                <div style="font-size: 20px; font-weight: 700; color: #fbbf24; font-family: var(--font-mono);" id="pipe-avg-score">0.000</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stream Switcher Buttons -->
+        <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+          <button class="btn btn-primary btn-sm" id="btn-tab-http-stream" style="font-weight: 600;">
+            📡 Real-Time HTTP Request Telemetry (10 Fields)
+          </button>
+          <button class="btn btn-secondary btn-sm" id="btn-tab-security-events" style="font-weight: 600;">
+            🛡️ Security Telemetry & Anomaly Events
+          </button>
+        </div>
+
+        <!-- SECTION A: Intercepted HTTP Request Stream (The 10 Fields) -->
+        <div id="section-http-stream" class="card">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h3 class="card-title" style="margin: 0;">Intercepted HTTP Request Telemetry Stream</h3>
+              <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 0 0;">
+                Captures: timestamp, username, endpoint, HTTP method, status, IP, user-agent, session, resource, and response volume
+              </p>
+            </div>
+            <span class="badge normal" style="font-size: 11px;">SQLite: api_request_logs</span>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="data-table" id="http-stream-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>User</th>
+                    <th>Method & Endpoint</th>
+                    <th>Status</th>
+                    <th>Client IP</th>
+                    <th>User-Agent</th>
+                    <th>Session ID</th>
+                    <th>Resource & Tier</th>
+                    <th>Volume</th>
+                    <th>Isolation Forest Score</th>
+                  </tr>
+                </thead>
+                <tbody id="http-stream-tbody">
+                  <tr><td colspan="10" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading intercepted API telemetry...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION B: Security Events & Anomaly Audit Trail -->
+        <div id="section-security-events" style="display: none;">
+          <div class="filter-bar">
+            <input type="text" id="activity-search-input" class="search-input" placeholder="Search by user, IP, action, resource...">
+            <select id="activity-filter-type" class="select-control">
+              <option value="">All Telemetry Sources & Classifications</option>
+              <option value="ACTUAL_ACTIVITY">Actual User Activity Only</option>
+              <option value="SIMULATION">Controlled Simulations Only</option>
+              <option value="NORMAL">Normal Only</option>
+              <option value="ANOMALY DETECTED">Anomalies Only</option>
+              <option value="High">High Risk</option>
+              <option value="Critical">Critical Risk</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" id="btn-reset-filters">Clear Filters</button>
+          </div>
+
+          <div class="card">
+            <div class="card-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table" id="activity-full-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Timestamp</th>
+                      <th>User</th>
+                      <th>Source</th>
+                      <th>IP</th>
+                      <th>API/min</th>
+                      <th>Resource</th>
+                      <th>Records</th>
+                      <th>Download</th>
+                      <th>AI Classification</th>
+                      <th>Risk</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="activity-events-tbody">
+                    <tr><td colspan="12" style="text-align: center; padding: 24px;">Loading activity audit trail...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ===================================================================
+           VIEW 3: AI SECURITY ANALYSIS
+           =================================================================== -->
+      <section class="view-section" id="view-analysis">
+        <div class="view-header">
+          <h2 class="view-title">AI Security Analysis</h2>
+          <p class="view-subtitle">Explainable AI diagnostics, multi-dimensional risk scoring, and prescriptive mitigations</p>
+        </div>
+
+        <!-- Event Selection Dropdown -->
+        <div class="filter-bar" style="margin-bottom: 20px;">
+          <label style="font-weight: 600; font-size: 13px;">Select Event to Inspect:</label>
+          <select id="analysis-event-select" class="select-control" style="min-width: 360px;">
+            <option value="">Select an event from audit history...</option>
+          </select>
+          <button class="btn btn-primary btn-sm" id="btn-analyze-selected">Inspect Analysis</button>
+        </div>
+
+        <!-- Main Analysis Card -->
+        <div class="card" id="analysis-main-card">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <h3 class="card-title">AI Incident Diagnostic Card</h3>
+              <span id="analysis-source-tag" class="badge normal" style="font-size: 11px;">Actual User Activity</span>
+            </div>
+            <span id="analysis-card-event-id" style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">Event #--</span>
+          </div>
+          <div class="card-body">
+            <div class="analysis-detail-grid">
+              <!-- Left Verdict & Risk Dial Box -->
+              <div class="verdict-box">
+                <div class="kpi-label" style="margin-bottom: 4px;">AI Behaviour Classification</div>
+                <div class="verdict-badge badge normal" id="analysis-prediction-badge" style="font-size: 15px;">NORMAL</div>
+                
+                <div class="kpi-label" style="margin-top: 10px;">Security Risk Assessment</div>
+                <div class="risk-dial">
+                  <span class="risk-number" id="analysis-risk-number">12</span>
+                  <span class="risk-denom">/ 100</span>
+                </div>
+                <div class="badge-risk low" id="analysis-risk-level-tag">Low Risk</div>
+                <div class="anomaly-score-tag">
+                  Anomaly Score: <span id="analysis-anomaly-score">0.142</span>
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 10px;">
+                  Algorithm: Isolation Forest (n=150)
+                </div>
+              </div>
+
+              <!-- Right Diagnostic Explanation Content -->
+              <div class="analysis-rows">
+                <div class="info-row">
+                  <div class="info-row-label">Detected Behaviour</div>
+                  <div class="info-row-value" id="analysis-detected-behaviour">Standard authenticated activity within nominal bounds.</div>
+                </div>
+
+                <div class="info-row">
+                  <div class="info-row-label">Affected Resource</div>
+                  <div class="info-row-value" id="analysis-affected-resource">Course Catalog API (Sensitivity Tier 1/5)</div>
+                </div>
+
+                <div class="info-row reason">
+                  <div class="info-row-label">Reason / Explainable Security Breakdown</div>
+                  <div class="info-row-value" id="analysis-reason-text">All behavioral features (API frequency, data egress, device fingerprint) align with normal operational baseline.</div>
+                </div>
+
+                <div class="info-row action">
+                  <div class="info-row-label">Recommended Security Action</div>
+                  <div class="info-row-value" id="analysis-recommended-action">No remediation required. Continuous telemetry active.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feature Deviations Breakdown -->
+            <div style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+              <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">Feature Deviation Breakdown (Z-Score Variance from Baseline)</h4>
+              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Highlights which behavioral attributes contributed most heavily to the Isolation Forest anomaly evaluation.</p>
+              <div class="feature-bars-container" id="analysis-feature-bars">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Behaviour Comparison Section (Normal vs Anomalous) -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <h3 class="card-title">Behaviour Comparison: Normal User vs. Compromised Account</h3>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+              During security reviews, this comparison demonstrates that valid credentials alone do not guarantee trust. The Isolation Forest evaluates post-login activity differences.
+            </p>
+            <div class="table-responsive">
+              <table class="data-table" style="font-size: 12px;">
+                <thead>
+                  <tr>
+                    <th>Behavioural Attribute</th>
+                    <th style="color: var(--success);">Normal User Activity</th>
+                    <th style="color: var(--danger);">Compromised Account (Valid Credentials)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Authentication Status</strong></td>
+                    <td><span class="badge normal">Successful Login</span></td>
+                    <td><span class="badge normal">Successful Login (Valid Password)</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Access Time</strong></td>
+                    <td>Normal Business Hours (10:30 AM)</td>
+                    <td>Normal Business Hours (2:15 PM)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Device Fingerprint</strong></td>
+                    <td>Known Workstation (Windows 11 / Mac)</td>
+                    <td><strong>New Device</strong> (Headless Linux x86_64)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>IP Address Origin</strong></td>
+                    <td>Known Campus Subnet (10.0.4.x)</td>
+                    <td><strong>New External IP</strong> (185.220.101.5)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>API Request Rate</strong></td>
+                    <td>14 – 26 requests / min</td>
+                    <td><strong>310 requests / min</strong> (Burst Flood)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Targeted Resource</strong></td>
+                    <td>Course Catalog API (Sensitivity 1/5)</td>
+                    <td><strong>Student Grade & Exam DB</strong> (Sensitivity 5/5)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Records Accessed</strong></td>
+                    <td>4 – 12 records</td>
+                    <td><strong>850 records</strong> (Mass Bulk Query)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Data Download Volume</strong></td>
+                    <td>0.8 – 2.4 MB</td>
+                    <td><strong>450.0 MB</strong> (Exfiltration Volume)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>AI Behaviour Classification</strong></td>
+                    <td><span class="badge normal">NORMAL</span></td>
+                    <td><span class="badge suspicious">ANOMALY DETECTED</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Calculated Risk Score</strong></td>
+                    <td><span class="badge-risk low">6 – 15 / 100 (LOW)</span></td>
+                    <td><span class="badge-risk critical">88 – 100 / 100 (CRITICAL)</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Security Action</strong></td>
+                    <td>Allow activity. Continue monitoring.</td>
+                    <td>Terminate session, revoke bearer token, enforce MFA reset.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ===================================================================
+           VIEW 4: DIGITAL TWIN
+           =================================================================== -->
+      <section class="view-section" id="view-digital-twin">
+        <div class="view-header">
+          <h2 class="view-title">Digital Twin Security State</h2>
+          <p class="view-subtitle">2D operational state model mapping entities, traffic flows, and defensive status in real time</p>
+        </div>
+
+        <!-- Digital Twin Status Banner -->
+        <div class="status-banner-card" style="margin-bottom: 20px;">
+          <div class="status-banner-left">
+            <div class="status-badge-lg secure" id="twin-status-badge">
+              <span class="status-dot"></span>
+              <span id="twin-status-text">● SECURE</span>
+            </div>
+            <div>
+              <div style="font-weight: 600; font-size: 14px;" id="twin-condition-title">Application State: NORMAL • Security State: LOW RISK</div>
+              <div class="status-desc" id="twin-recent-anomaly">Recent Anomaly: None. Continuous telemetry active.</div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Current System Risk</div>
+            <div style="font-size: 22px; font-weight: 700;" id="twin-risk-score">12 / 100</div>
+          </div>
+        </div>
+
+        <!-- 2D Visual Flow Topology Card -->
+        <div class="twin-canvas-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 15px; font-weight: 600;">2D Application & Threat Topology</h3>
+            <span style="font-size: 12px; color: var(--text-muted);">Real-Time Node Telemetry</span>
+          </div>
+
+          <div class="twin-topology-container">
+            <!-- Node 1: Application Gateway -->
+            <div class="twin-node healthy" id="twin-node-app_gateway">
+              <div class="node-icon">🌐</div>
+              <div class="node-name">API Gateway</div>
+              <span class="node-status-badge badge-risk low" id="node-status-app_gateway">ACTIVE</span>
+              <div class="node-meta" id="node-meta-app_gateway">Throughput: 20 req/min<br>Egress: 1.2 MB/s</div>
+            </div>
+
+            <div class="twin-connector"></div>
+
+            <!-- Node 2: User Identity & Sessions -->
+            <div class="twin-node healthy" id="twin-node-users_pool">
+              <div class="node-icon">👤</div>
+              <div class="node-name">User Sessions</div>
+              <span class="node-status-badge badge-risk low" id="node-status-users_pool">ACTIVE</span>
+              <div class="node-meta" id="node-meta-users_pool">User: student01<br>IP: 10.0.4.15</div>
+            </div>
+
+            <div class="twin-connector"></div>
+
+            <!-- Node 3: Protected Resources -->
+            <div class="twin-node healthy" id="twin-node-protected_dbs">
+              <div class="node-icon">🗄️</div>
+              <div class="node-name">Protected DBs</div>
+              <span class="node-status-badge badge-risk low" id="node-status-protected_dbs">HEALTHY</span>
+              <div class="node-meta" id="node-meta-protected_dbs">Resource: Course Catalog<br>Tier: 1/5</div>
+            </div>
+
+            <div class="twin-connector"></div>
+
+            <!-- Node 4: AI CyberShield Engine -->
+            <div class="twin-node healthy" id="twin-node-ai_engine">
+              <div class="node-icon">🧠</div>
+              <div class="node-name">AI Isolation Forest</div>
+              <span class="node-status-badge badge-risk low" id="node-status-ai_engine">MONITORING</span>
+              <div class="node-meta" id="node-meta-ai_engine">Latency: 3.4 ms<br>Decision: Normal</div>
+            </div>
+
+            <div class="twin-connector"></div>
+
+            <!-- Node 5: Digital Twin State -->
+            <div class="twin-node healthy" id="twin-node-security_state">
+              <div class="node-icon">🛡️</div>
+              <div class="node-name">Twin Security State</div>
+              <span class="node-status-badge badge-risk low" id="node-status-security_state">LOW RISK</span>
+              <div class="node-meta" id="node-meta-security_state">Risk: 12/100 (Low)<br>Posture: Guarded</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Protected Resources Grid -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <h3 class="card-title">Protected Cloud Assets & Integrity State</h3>
+          </div>
+          <div class="card-body">
+            <div class="resources-grid" id="twin-resources-grid">
+              <!-- Injected via JavaScript -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ===================================================================
+           VIEW 5: SECURITY TESTING / SIMULATION
+           =================================================================== -->
+      <section class="view-section" id="view-simulation">
+        <div class="view-header">
+          <h2 class="view-title">Security Testing & Simulation Suite</h2>
+          <p class="view-subtitle">Generate realistic behavioral events and demonstrate real-time AI anomaly detection</p>
+        </div>
+
+        <!-- SECTION: AI BEHAVIOUR VERIFICATION (Core Review Experience) -->
+        <div class="card" style="border: 2px solid var(--primary-border); margin-bottom: 24px;">
+          <div class="card-header" style="background-color: var(--primary-light);">
+            <div>
+              <h3 class="card-title" style="color: var(--primary);">🔬 Core AI Behaviour Verification (Academic Review Benchmark)</h3>
+              <p style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
+                Demonstrates that <strong>Valid Credentials ≠ Safe Behavior</strong>. Both scenarios log in successfully; the AI evaluates post-authentication actions.
+              </p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <!-- Test 1: Normal User Activity -->
+              <div style="background-color: var(--bg-surface); border: 1px solid var(--border-color); border-top: 4px solid var(--success); border-radius: var(--radius-md); padding: 18px;">
+                <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">Test 1 — Normal User Activity</div>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 14px;">
+                  Authenticates with valid credentials. Uses verified device, campus IP, normal request rate (18 req/min), standard catalog access, and low download (1.2 MB).
+                </p>
+                <button class="btn btn-secondary sim-btn" data-scenario="normal_activity" style="width: 100%; border-color: var(--success); color: var(--success); font-weight: 600;">
+                  Run Normal User Activity
+                </button>
+              </div>
+
+              <!-- Test 2: Compromised Account Simulation -->
+              <div style="background-color: var(--bg-surface); border: 1px solid var(--border-color); border-top: 4px solid var(--danger); border-radius: var(--radius-md); padding: 18px;">
+                <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--danger);">Test 2 — Compromised Account Simulation</div>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 14px;">
+                  Authenticates with <strong>valid credentials</strong>. But post-login actions deviate: new device, external IP, 310 req/min API burst, restricted Exam DB access, and 450 MB download.
+                </p>
+                <button class="btn btn-primary sim-btn" data-scenario="compromised_account" style="width: 100%; background-color: var(--danger); font-weight: 600;">
+                  Simulate Compromised Account
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-Time Pipeline Tracker -->
+        <div class="pipeline-flow">
+          <div class="flow-step active"><span>1️⃣</span> <span>Scenario Triggered</span></div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-step active"><span>2️⃣</span> <span>Event Generated</span></div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-step active"><span>3️⃣</span> <span>Isolation Forest Model</span></div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-step active"><span>4️⃣</span> <span>Risk Scoring & XAI</span></div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-step active"><span>5️⃣</span> <span>Digital Twin Updated</span></div>
+        </div>
+
+        <!-- Additional Scenario Cards Grid -->
+        <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Additional Security Threat Scenarios</h3>
+        <div class="scenario-grid">
+          <!-- Scenario: Repeated Login Attempts -->
+          <div class="scenario-card">
+            <div>
+              <div class="scenario-header">
+                <span class="scenario-title">Repeated Login Attempts</span>
+                <span class="badge suspicious">Authentication</span>
+              </div>
+              <p class="scenario-desc">High-frequency failed authentication attempts from a script against administrative IAM portal triggering lock thresholds.</p>
+            </div>
+            <div class="scenario-footer">
+              <span class="scenario-tag">Expected: High Risk</span>
+              <button class="btn btn-secondary btn-sm sim-btn" data-scenario="repeated_logins">Simulate Brute Force</button>
+            </div>
+          </div>
+
+          <!-- Scenario: API Burst -->
+          <div class="scenario-card">
+            <div>
+              <div class="scenario-header">
+                <span class="scenario-title">API Burst</span>
+                <span class="badge suspicious">Application</span>
+              </div>
+              <p class="scenario-desc">Volumetric flood of 380+ API requests per minute querying profile endpoints, characteristic of automated scraping or DoS.</p>
+            </div>
+            <div class="scenario-footer">
+              <span class="scenario-tag">Expected: High Risk</span>
+              <button class="btn btn-secondary btn-sm sim-btn" data-scenario="api_burst">Simulate API Burst</button>
+            </div>
+          </div>
+
+          <!-- Scenario: Sensitive Resource Access -->
+          <div class="scenario-card">
+            <div>
+              <div class="scenario-header">
+                <span class="scenario-title">Sensitive Resource Access</span>
+                <span class="badge suspicious">Privilege</span>
+              </div>
+              <p class="scenario-desc">Authenticated session attempting unauthorized probing and bulk query into confidential Financial Aid database.</p>
+            </div>
+            <div class="scenario-footer">
+              <span class="scenario-tag">Expected: Elevated Risk</span>
+              <button class="btn btn-secondary btn-sm sim-btn" data-scenario="sensitive_access">Simulate Privilege Abuse</button>
+            </div>
+          </div>
+
+          <!-- Scenario: Large Data Download -->
+          <div class="scenario-card">
+            <div>
+              <div class="scenario-header">
+                <span class="scenario-title">Large Data Download</span>
+                <span class="badge suspicious">Exfiltration</span>
+              </div>
+              <p class="scenario-desc">Massive data egress of 450+ MB across 900+ records via remote shell script breaching single-session transfer limits.</p>
+            </div>
+            <div class="scenario-footer">
+              <span class="scenario-tag">Expected: Critical Risk</span>
+              <button class="btn btn-secondary btn-sm sim-btn" data-scenario="large_download">Simulate Exfiltration</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Simulation Output Container with Input Feature Table -->
+        <div class="sim-live-output" id="sim-live-output" style="display: none;">
+          <div class="sim-output-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 16px;">⚡</span>
+              <strong id="sim-result-scenario-title">Simulation Execution Result</strong>
+            </div>
+            <span class="badge" id="sim-result-badge">NORMAL</span>
+          </div>
+          <div class="sim-output-body" id="sim-result-body">
+            <!-- Injected via JavaScript upon button click -->
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ===================================================================
+           VIEW 6: SETTINGS & MODEL STATUS
+           =================================================================== -->
+      <section class="view-section" id="view-settings">
+        <div class="view-header">
+          <h2 class="view-title">System Settings & Model Inspection</h2>
+          <p class="view-subtitle">Configuration parameters, Machine Learning model hyperparameters, and demo state reset</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
+          <!-- Model Details Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Machine Learning Model Architecture</h3>
+            </div>
+            <div class="card-body">
+              <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 8px 0; color: var(--text-muted);">Model</td><td style="text-align: right; font-weight: 600;">Isolation Forest (scikit-learn)</td></tr>
+                <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 8px 0; color: var(--text-muted);">Primary Purpose</td><td style="text-align: right; font-weight: 600;">Post-Authentication Behavioral Anomaly Detection</td></tr>
+                <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 8px 0; color: var(--text-muted);">Estimators (n_estimators)</td><td style="text-align: right; font-weight: 600;">150 Decision Trees</td></tr>
+                <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 8px 0; color: var(--text-muted);">Contamination Factor</td><td style="text-align: right; font-weight: 600;">0.12 (12% Outlier Boundary)</td></tr>
+                <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 8px 0; color: var(--text-muted);">Behavioral Feature Count</td><td style="text-align: right; font-weight: 600;">12 Monitored Dimensions</td></tr>
+                <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 8px 0; color: var(--text-muted);">Data Preprocessing</td><td style="text-align: right; font-weight: 600;">StandardScaler Normalization (Z-Score)</td></tr>
+                <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 8px 0; color: var(--text-muted);">Model Validation</td><td style="text-align: right; font-weight: 600;">Validated on synthetic cloud behavioral data</td></tr>
+                <tr><td style="padding: 8px 0; color: var(--text-muted);">Inference Latency</td><td style="text-align: right; font-weight: 600;">&lt; 5 ms per transaction</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- Academic Roadmap & Phase Separation -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Project Implementation Roadmap</h3>
+            </div>
+            <div class="card-body">
+              <div style="margin-bottom: 14px;">
+                <div style="font-weight: 700; color: var(--success); font-size: 13px;">Phase 1 (Current — 7th Semester):</div>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
+                  Fully functional local cybersecurity prototype. Isolation Forest anomaly detection, SQLite persistence, 2D Digital Twin state, explainable risk scoring, and post-login compromised account detection.
+                </p>
+              </div>
+              <div>
+                <div style="font-weight: 700; color: var(--primary); font-size: 13px;">Phase 2 (Future Scope — 8th Semester):</div>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
+                  AWS CloudWatch log streams, AWS IAM policy integration, multi-cloud federated Digital Twin, attack graph prediction, and automated AWS WAF remediation rules.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Authentication Audit Trail Card (Module 5.1) -->
+        <div class="card" style="margin-top: 20px;">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h3 class="card-title">Authentication Audit Trail (Module 5.1)</h3>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                Persistent security log of login attempts, credential validations, logouts, and unauthorized access rejections.
+              </p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="App.loadAuthLogs()">Refresh Auth Logs 🔄</button>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="data-table" style="font-size: 12px;">
+                <thead>
+                  <tr>
+                    <th>Log ID</th>
+                    <th>Timestamp</th>
+                    <th>Username</th>
+                    <th>Event Type</th>
+                    <th>Source IP</th>
+                    <th>Authentication Status</th>
+                  </tr>
+                </thead>
+                <tbody id="settings-auth-logs-tbody">
+                  <tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">Loading authentication audit trail...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demonstration Reset Card -->
+        <div class="card" style="margin-top: 20px;">
+          <div class="card-header">
+            <h3 class="card-title">Demo Replay & Database Reset</h3>
+          </div>
+          <div class="card-body" style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <div style="font-weight: 600; font-size: 13px;">Reset to Clean Baseline State</div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                Clears simulation test events and restores the initial normal baseline demonstration state (● SECURE).
+              </div>
+            </div>
+            <button class="btn btn-secondary" id="btn-reset-db">Reset Database 🔄</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- JavaScript Application Modules -->
+<script src="/static/js/app.js"></script>
+<script src="/static/js/dashboard.js"></script>
+<script src="/static/js/activity.js"></script>
+<script src="/static/js/analysis.js"></script>
+<script src="/static/js/digital_twin.js"></script>
+<script src="/static/js/simulation.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "model_name": "IsolationForest",
+  "algorithm": "Unsupervised Isolation Forest Anomaly Detection",
+  "trained_at": "2026-09-22T12:14:23.912973",
+  "n_samples": 1500,
+  "n_estimators": 150,
+  "contamination": 0.12,
+  "feature_columns": [
+    "requests_per_minute",
+    "failed_login_count",
+    "login_frequency_per_hr",
+    "resource_sensitivity_level",
+    "records_accessed",
+    "data_download_mb",
+    "is_new_device",
+    "is_new_ip",
+    "unusual_api_access",
+    "session_duration_minutes",
+    "access_time_hour",
+    "behaviour_deviation_score"
+  ],
+  "score_calibration": {
+    "min_raw_score": -0.1473298227469566,
+    "max_raw_score": 0.1633600354000853,
+    "mean_raw_score": 0.08615281489606334,
+    "threshold_zero": 0.0
+  },
+  "metrics": {
+    "accuracy": 0.9593333333333334,
+    "suspicious_f1": 0.8123076923076923,
+    "normal_f1": 0.9771962616822429,
+    "confusion_matrix": [
+      [
+        132,
+        48
+      ],
+      [
+        13,
+        1307
+      ]
+    ]
+  }
+}
